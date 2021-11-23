@@ -1,5 +1,6 @@
 struct User {
-    email: Option<String>,
+    id: String,
+    email: String,
     first_name: Option<String>,
     last_name: Option<String>
 }
@@ -12,29 +13,27 @@ impl User {
     // ) -> Self {
     //     Self { email, first_name, last_name }
     // }
-    fn builder() -> UserBuilder {
-        UserBuilder::new()
+
+    fn builder(id: impl Into<String>, email: impl Into<String>) -> UserBuilder {
+        UserBuilder::new(id, email)
     }
 }
 
 struct UserBuilder {
-    email: Option<String>,
+    id: String,
+    email: String,
     first_name: Option<String>,
     last_name: Option<String>
 }
 
 impl UserBuilder {
-    fn new() -> Self {
+    fn new(id: impl Into<String>, email: impl Into<String>) -> Self {
         Self {
-            email: None,
+            id: id.into(),
+            email: email.into(),
             first_name: None,
             last_name: None,
         }
-    }
-
-    fn email(mut self, email: impl Into<String>) -> Self {
-        self.email = Some(email.into());
-        self
     }
 
     fn first_name(mut self, first_name: impl Into<String>) -> Self {
@@ -48,14 +47,13 @@ impl UserBuilder {
     }
 
     fn build(self) -> User {
-        let Self { email, first_name, last_name } = self;
-        User { email, first_name, last_name }
+        let Self { id, email, first_name, last_name } = self;
+        User { id, email, first_name, last_name }
     }
 }
 
 fn main() {
-    let greyblake = User::builder()
-        .email("example@example.com")
+    let greyblake = User::builder("13", "greyblake@example.com")
         .first_name("Sergey")
         .build();
 }
